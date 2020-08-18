@@ -9,10 +9,12 @@ export interface UserProps {
   age?: number;
 }
 
+const rootUrl = "http://localhost:3000/users";
+
 export class User {
   constructor(private data: UserProps) {}
   public events: Eventing = new Eventing();
-  public sync: Sync<UserProps> = new Sync<UserProps>();
+  public sync: Sync<UserProps> = new Sync<UserProps>(rootUrl);
 
   //gets info for the user
   get(propName: string): number | string {
