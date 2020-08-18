@@ -1,19 +1,18 @@
-import axios, { AxiosResponse } from "axios";
+import { Eventing } from "./Eventing";
+import { Sync } from "./Sync";
 
 //interface to describe a user's properties
-interface UserProps {
+export interface UserProps {
   // ? makes these properties optional
   id?: number;
   name?: string;
   age?: number;
 }
 
-type Callback = () => void;
-
 export class User {
-  events: { [key: string]: Callback[] } = {};
-
   constructor(private data: UserProps) {}
+  public events: Eventing = new Eventing();
+  public sync: Sync<UserProps> = new Sync<UserProps>();
 
   //gets info for the user
   get(propName: string): number | string {
@@ -23,30 +22,5 @@ export class User {
   //updates info about the user
   set(updateProps: UserProps): void {
     Object.assign(this.data, updateProps);
-  }
-
-  //registers an event handler with this user object
-  on(eventName: string, callback: Callback) {
-    const handlers = this.events[eventName] || [];
-    handlers.push(callback);
-    this.events[eventName] = handlers;
-  }
-
-  //trigger event to alert other parts of app something has changed
-  trigger(eventName: string): void {
-    const handlers = this.events[eventName];
-
-    if (!handlers || handlers.length === 0) return;
-
-    handlers.forEach((callback) => {
-      callback();
-    });
-  }
-
-  fetch(): void {
-    axios.get(`http://localhost:3000/users/${this.get("id")}`)
-    .then((response: AxiosResponse): void => {
-        this.set(response.data);
-    }
   }
 }
