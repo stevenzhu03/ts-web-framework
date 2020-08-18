@@ -12,17 +12,8 @@ export interface UserProps {
 const rootUrl = "http://localhost:3000/users";
 
 export class User {
-  constructor(private data: UserProps) {}
   public events: Eventing = new Eventing();
   public sync: Sync<UserProps> = new Sync<UserProps>(rootUrl);
 
   //gets info for the user
-  get(propName: string): number | string {
-    return this.data[propName];
-  }
-
-  //updates info about the user
-  set(updateProps: UserProps): void {
-    Object.assign(this.data, updateProps);
-  }
 }
