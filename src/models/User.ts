@@ -1,6 +1,7 @@
 import { Eventing } from "./Eventing";
 import { Sync } from "./Sync";
 import { Attributes } from "./Attributes";
+import { AxiosResponse } from "axios";
 
 //interface to describe a user's properties
 export interface UserProps {
@@ -37,5 +38,21 @@ export class User {
   //accesssor (getter)
   get get() {
     return this.attributes.get;
+  }
+
+  set(update: UserProps): void {
+    this.attributes.set(update);
+    //user info has change, probably want to modify some HTML
+    this.events.trigger("change");
+  }
+
+  fetch(): void {
+    const id = this.attributes.get("id");
+
+    if (typeof id !== "number") throw new Error("Cannot fetch without and id");
+
+    this.sync.fetch(id).then((response: AxiosResponse): void => {
+      this.set(response.data);
+    });
   }
 }
