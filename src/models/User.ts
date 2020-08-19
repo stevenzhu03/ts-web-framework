@@ -20,4 +20,22 @@ export class User {
   constructor(attrs: UserProps) {
     this.attributes = new Attributes<UserProps>(attrs);
   }
+
+  //pass-through methods (immediatly invokes methods in other class)
+  //accesssor (getter)
+  get on() {
+    //returns the reference to the on method in Eventing, not calling it
+    //you can use by calling user.on("change", .....callback)
+    return this.events.on;
+  }
+
+  //accesssor (getter)
+  get trigger() {
+    return this.events.trigger;
+  }
+
+  //accesssor (getter)
+  get get() {
+    return this.attributes.get;
+  }
 }
