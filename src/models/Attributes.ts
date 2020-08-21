@@ -22,6 +22,10 @@ export class Attributes<T> {
   set(updateProps: T): void {
     Object.assign(this.data, updateProps);
   }
+
+  getAll(): T {
+    return this.data;
+  }
 }
 
 const atr = new Attributes<UserProps>({
