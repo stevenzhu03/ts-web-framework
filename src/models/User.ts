@@ -1,7 +1,7 @@
-import { Eventing } from "./Eventing";
-import { Sync } from "./Sync";
+import { Model } from "./Model";
 import { Attributes } from "./Attributes";
-import { AxiosResponse } from "axios";
+import { APISync } from "./APISync";
+import { Eventing } from "./Eventing";
 
 //interface to describe a user's properties
 export interface UserProps {
@@ -13,12 +13,12 @@ export interface UserProps {
 
 const rootUrl = "http://localhost:3000/users";
 
-export class User {
-  public events: Eventing = new Eventing();
-  public sync: Sync<UserProps> = new Sync<UserProps>(rootUrl);
-  public attributes: Attributes<UserProps>;
-
-  constructor(attrs: UserProps) {
-    this.attributes = new Attributes<UserProps>(attrs);
+export class User extends Model<UserProps> {
+  static buildUser(attr: UserProps): User {
+    return new User(
+      new Attributes<UserProps>(attr),
+      new Eventing(),
+      new APISync<UserProps>(rootUrl)
+    );
   }
 }
