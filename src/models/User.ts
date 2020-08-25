@@ -14,6 +14,7 @@ export interface UserProps {
 const rootUrl = "http://localhost:3000/users";
 
 export class User extends Model<UserProps> {
+  //can create different types of users with more static methods
   static buildUser(attr: UserProps): User {
     return new User(
       new Attributes<UserProps>(attr),

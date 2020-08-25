@@ -1,3 +1,3 @@
 import { User } from "./models/User";
 
-const user = new User({ name: "Bob", age: 0 });
+const user = User.buildUser({ name: "Bob", age: 0 });
