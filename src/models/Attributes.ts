@@ -27,11 +27,3 @@ export class Attributes<T> {
     return this.data;
   }
 }
-
-const atr = new Attributes<UserProps>({
-  id: 5,
-  age: 6,
-  name: "bobb",
-});
-
-const name = atr.get("name");
