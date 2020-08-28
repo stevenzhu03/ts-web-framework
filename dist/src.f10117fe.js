@@ -129,22 +129,34 @@ var UserForm =
 /** @class */
 function () {
   function UserForm(parent, model) {
+    var _this = this;
+
     this.parent = parent;
     this.model = model;
+
+    this.onSetAgeClick = function () {
+      _this.model.setRandomAge();
+    };
+
+    this.bindModel();
   }
+
+  UserForm.prototype.bindModel = function () {
+    var _this = this;
+
+    this.model.on("change", function () {
+      _this.render();
+    });
+  };
 
   UserForm.prototype.eventsMap = function () {
     return {
-      "click:button": this.onButtonClick
+      "click:.set-age": this.onSetAgeClick
     };
   };
 
-  UserForm.prototype.onButtonClick = function () {
-    console.log("hi there");
-  };
-
   UserForm.prototype.template = function () {
-    return "\n            <div>\n                <h1>User Form</h1>\n                <div>User name: " + this.model.get("name") + "</div>\n                <div>User age: " + this.model.get("age") + "</div>\n                <input/>\n                <button>Click Me</button>\n            </div>\n            ";
+    return "\n            <div>\n                <h1>User Form</h1>\n                <div>User name: " + this.model.get("name") + "</div>\n                <div>User age: " + this.model.get("age") + "</div>\n                <input/>\n                <button>Click Me</button>\n                <button class=\"set-age\">Set Random Age</button>\n            </div>\n            ";
   };
 
   UserForm.prototype.bindEvents = function (fragment) {
@@ -166,6 +178,7 @@ function () {
   };
 
   UserForm.prototype.render = function () {
+    this.parent.innerHTML = "";
     var templateElement = document.createElement("template");
     templateElement.innerHTML = this.template();
     this.bindEvents(templateElement.content);
@@ -2282,6 +2295,13 @@ function (_super) {
   User.buildUserCollection = function () {
     return new Collection_1.Collection(rootUrl, function (json) {
       return User.buildUser(json);
+    });
+  };
+
+  User.prototype.setRandomAge = function () {
+    var age = Math.round(Math.random() * 100);
+    this.set({
+      age: age
     });
   };
 
