@@ -123,7 +123,10 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.View = void 0;
+exports.View = void 0; //generic constraint (used to guarantee that a generic model will have certain properties)
+//in this case, we can extend the model Class
+//Now in this case, model also needs a type with an id, for ex. UserProps
+//So K is being passed in as a second argument to the generic to define this for the Model Class
 
 var View =
 /** @class */
