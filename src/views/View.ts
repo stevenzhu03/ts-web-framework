@@ -6,11 +6,18 @@ import { Model } from "../models/Model";
 //So K is being passed in as a second argument to the generic to define this for the Model Class
 
 export abstract class View<T extends Model<K>, K> {
+  regions: { [key: string]: Element } = {};
+
   constructor(public parent: Element, public model: T) {
     this.bindModel();
   }
 
   abstract template(): string;
+
+  regionsMap(): { [key: string]: string } {
+    //region is some element where we want to nest a view
+    return {};
+  }
 
   eventsMap(): { [key: string]: () => void } {
     return {};
@@ -34,6 +41,18 @@ export abstract class View<T extends Model<K>, K> {
     }
   }
 
+  mapRegions(fragment: DocumentFragment): void {
+    const regionsMap = this.regionsMap();
+
+    for (let key in regionsMap) {
+      const selector = regionsMap[key];
+      const element = fragment.querySelector(selector);
+      if (element) {
+        this.regions[key] = element;
+      }
+    }
+  }
+
   render(): void {
     this.parent.innerHTML = "";
 
@@ -41,6 +60,7 @@ export abstract class View<T extends Model<K>, K> {
     templateElement.innerHTML = this.template();
 
     this.bindEvents(templateElement.content);
+    this.mapRegions(templateElement.content);
 
     this.parent.append(templateElement.content);
   }
